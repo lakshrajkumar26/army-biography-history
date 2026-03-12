@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 exports.adminAuth = (req, res, next) => {
 
@@ -10,7 +11,7 @@ exports.adminAuth = (req, res, next) => {
 
   try {
 
-    const decoded = jwt.verify(token, "secretkey");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secretkey");
 
     if (decoded.role !== "admin") {
       return res.status(403).json({ message: "Admin access only" });

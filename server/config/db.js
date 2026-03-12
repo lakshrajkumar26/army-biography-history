@@ -1,12 +1,15 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect("mongodb://127.0.0.1:27017/armydata");
+    const conn = await mongoose.connect(
+      process.env.MONGO_URI || "mongodb://127.0.0.1:27017/armydata"
+    );
 
-    console.log(` MongoDB Connected: ${conn.connection.host}`);
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error(" MongoDB connection failed:", error.message);
+    console.error("❌ MongoDB connection failed:", error.message);
     process.exit(1);
   }
 };

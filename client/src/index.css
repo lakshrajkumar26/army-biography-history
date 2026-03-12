@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
 * {
   margin: 0;
@@ -22,62 +22,48 @@ body {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: #0a0f14;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #dc2626;
-  border-radius: 4px;
+  background: linear-gradient(180deg, #dc2626, #fbbf24);
+  border-radius: 10px;
+  border: 2px solid #0a0f14;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ef4444;
+  background: linear-gradient(180deg, #ef4444, #fcd34d);
 }
 
-/* Particle background */
-.particles {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
+/* Custom scrollbar for modal */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
 }
 
-.particle {
-  position: absolute;
-  width: 2px;
-  height: 2px;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
   background: #dc2626;
-  border-radius: 50%;
-  animation: float 8s infinite linear;
+  border-radius: 10px;
 }
 
-@keyframes float {
-  0% {
-    transform: translateY(100vh) rotate(0deg);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100px) rotate(360deg);
-    opacity: 0;
-  }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ef4444;
 }
 
 /* Glitch effect */
 .glitch {
   position: relative;
+  animation: glitch-skew 3s infinite;
 }
 
 .glitch::before,
@@ -88,18 +74,21 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+  opacity: 0.8;
 }
 
 .glitch::before {
   animation: glitch-1 0.5s infinite;
   color: #ff0000;
   z-index: -1;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
 }
 
 .glitch::after {
   animation: glitch-2 0.5s infinite;
   color: #00ffff;
   z-index: -2;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
 }
 
 @keyframes glitch-1 {
@@ -107,7 +96,7 @@ body {
     transform: translate(0);
   }
   15%, 49% {
-    transform: translate(-2px, 2px);
+    transform: translate(-3px, 3px);
   }
 }
 
@@ -116,7 +105,25 @@ body {
     transform: translate(0);
   }
   21%, 62% {
-    transform: translate(2px, -2px);
+    transform: translate(3px, -3px);
+  }
+}
+
+@keyframes glitch-skew {
+  0%, 100% {
+    transform: skew(0deg);
+  }
+  20% {
+    transform: skew(-0.5deg);
+  }
+  40% {
+    transform: skew(0.5deg);
+  }
+  60% {
+    transform: skew(-0.5deg);
+  }
+  80% {
+    transform: skew(0.5deg);
   }
 }
 
@@ -125,31 +132,36 @@ body {
   text-shadow: 
     0 0 5px #dc2626,
     0 0 10px #dc2626,
-    0 0 15px #dc2626,
-    0 0 20px #dc2626;
+    0 0 20px #dc2626,
+    0 0 40px #dc2626,
+    0 0 80px #dc2626;
+  animation: neon-pulse 2s ease-in-out infinite alternate;
 }
 
-/* Card hover effects */
-.hero-card {
-  transition: all 0.3s ease;
-  background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-  border: 1px solid #333;
-}
-
-.hero-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: 
-    0 20px 40px rgba(220, 38, 38, 0.3),
-    0 0 20px rgba(220, 38, 38, 0.2);
-  border-color: #dc2626;
+@keyframes neon-pulse {
+  from {
+    text-shadow: 
+      0 0 5px #dc2626,
+      0 0 10px #dc2626,
+      0 0 20px #dc2626,
+      0 0 40px #dc2626;
+  }
+  to {
+    text-shadow: 
+      0 0 10px #dc2626,
+      0 0 20px #dc2626,
+      0 0 40px #dc2626,
+      0 0 80px #dc2626,
+      0 0 120px #dc2626;
+  }
 }
 
 /* Loading animation */
 .loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #333;
-  border-top: 4px solid #dc2626;
+  width: 50px;
+  height: 50px;
+  border: 5px solid #333;
+  border-top: 5px solid #dc2626;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -163,10 +175,115 @@ body {
 .reveal {
   opacity: 0;
   transform: translateY(50px);
-  transition: all 0.8s ease;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(90deg, #dc2626, #fbbf24, #dc2626);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+}
+
+/* Shimmer effect */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Pulse animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(220, 38, 38, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.8), 0 0 40px rgba(220, 38, 38, 0.6);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Tricolor animation */
+@keyframes tricolor-wave {
+  0%, 100% {
+    transform: translateX(0) scaleX(1);
+  }
+  50% {
+    transform: translateX(10px) scaleX(1.1);
+  }
+}
+
+.tricolor-wave {
+  animation: tricolor-wave 2s ease-in-out infinite;
+}
+
+/* Delay utilities */
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
 }

@@ -1,11 +1,12 @@
-import Landing from "./pages/Landing";
+import Landing from "./pages/Landing"
+import "./App.css"
 
 function App() {
   return (
-    <div>
+    <div className="app-container">
       <Landing />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
