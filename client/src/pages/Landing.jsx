@@ -99,12 +99,57 @@ gsap.to(clone, {
 
       <div className="flex flex-col md:flex-row">
 
-        <aside className="w-[260px] p-6">
-          <button onClick={() => setFilter("all")}>ALL</button>
-          <button onClick={() => setFilter("army")}>Army</button>
-          <button onClick={() => setFilter("air force")}>Air Force</button>
-          <button onClick={() => setFilter("navy")}>Navy</button>
-        </aside>
+       <aside className="w-full text-xl md:w-[260px] bg-white p-6 border-r border-gray-200">
+
+  <div className="flex md:flex-col gap-3">
+
+    <button
+      onClick={() => setFilter("all")}
+      className={`w-full text-left px-5 py-3 rounded-md transition
+      ${filter === "all"
+        ? "bg-gray-800 text-white"
+        : "bg-gray-100 text-gray-700 hover:bg-gray-200"}
+      `}
+    >
+      All
+    </button>
+
+    <button
+      onClick={() => setFilter("army")}
+      className={`w-full text-left px-5 py-3 rounded-md transition
+      ${filter === "army"
+        ? "bg-gray-800 text-white"
+        : "bg-gray-100 text-gray-700 hover:bg-gray-200"}
+      `}
+    >
+      Army
+    </button>
+
+    <button
+      onClick={() => setFilter("air force")}
+      className={`w-full text-left px-5 py-3 rounded-md transition
+      ${filter === "air force"
+        ? "bg-gray-800 text-white"
+        : "bg-gray-100 text-gray-700 hover:bg-gray-200"}
+      `}
+    >
+      Air Force
+    </button>
+
+    <button
+      onClick={() => setFilter("navy")}
+      className={`w-full text-left px-5 py-3 rounded-md transition
+      ${filter === "navy"
+        ? "bg-gray-800 text-white"
+        : "bg-gray-100 text-gray-700 hover:bg-gray-200"}
+      `}
+    >
+      Navy
+    </button>
+
+  </div>
+
+</aside>
 
         <main className="flex-1 p-12">
 
