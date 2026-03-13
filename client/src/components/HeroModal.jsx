@@ -30,13 +30,13 @@ export default function HeroModal({ hero, onClose }) {
 
       // frames slide outward
       tl.to(leftFrameRef.current,{
-        x:-360,
+        x:-280,
         duration:0.7,
         ease:"power4.out"
       },"-=0.2")
 
       tl.to(rightFrameRef.current,{
-        x:360,
+        x:280,
         duration:0.7,
         ease:"power4.out"
       },"-=0.7")
@@ -141,7 +141,7 @@ export default function HeroModal({ hero, onClose }) {
       {/* MODAL LAYOUT */}
 
       <div
-        className="absolute left-1/2 top-1/2 flex items-center justify-center gap-4 -translate-x-1/2 -translate-y-1/2"
+        className="absolute left-1/2 top-1/2 flex items-center justify-center gap-1 -translate-x-1/2 -translate-y-1/2"
         onClick={(e)=>e.stopPropagation()}
       >
 
