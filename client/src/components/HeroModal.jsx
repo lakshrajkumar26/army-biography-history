@@ -7,8 +7,17 @@ export default function HeroModal({ hero, onClose }) {
   const centerFrameRef = useRef(null)
   const leftFrameRef = useRef(null)
   const rightFrameRef = useRef(null)
+  const videoRefs = useRef([])
 
   useEffect(() => {
+    // Try to play videos manually
+    videoRefs.current.forEach((video, index) => {
+      if (video) {
+        video.play().catch(err => {
+          console.log(`Video ${index} autoplay failed:`, err)
+        })
+      }
+    })
 
     const ctx = gsap.context(() => {
 
@@ -99,32 +108,138 @@ export default function HeroModal({ hero, onClose }) {
 
     <div
       ref={modalRef}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black"
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ backgroundColor: '#000000' }}
       onClick={handleClose}
     >
 
       {/* VIDEO BACKGROUND */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 1 }}>
+        {/* Top Left Corner */}
+        <video
+          ref={el => videoRefs.current[0] = el}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute object-cover opacity-40"
+          style={{
+            width: '280px',
+            height: '200px',
+            top: '5%',
+            left: '3%',
+            filter: 'blur(4px)',
+          }}
+          onError={(e) => console.error('Video 1 error:', e)}
+          onLoadedData={() => console.log('Video 1 loaded')}
+        >
+          <source src="/videos/bg1.mp4" type="video/mp4"/>
+        </video>
 
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {/* Top Right Corner */}
+        <video
+          ref={el => videoRefs.current[1] = el}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute object-cover opacity-35"
+          style={{
+            width: '320px',
+            height: '220px',
+            top: '8%',
+            right: '4%',
+            filter: 'blur(4px)',
+          }}
+          onError={(e) => console.error('Video 2 error:', e)}
+          onLoadedData={() => console.log('Video 2 loaded')}
+        >
+          <source src="/videos/bg2.mp4" type="video/mp4"/>
+        </video>
 
-        {[1,2,3,4,5].map((v,i)=>(
-          <video
-            key={i}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute object-cover opacity-25 blur-sm"
-            style={{
-              width:`${320 + i*40}px`,
-              left:`${10 + i*15}%`,
-              top:`${10 + (i*12)%80}%`
-            }}
-          >
-            <source src={`/videos/bg${(i%3)+1}.mp4`} type="video/mp4"/>
-          </video>
-        ))}
+        {/* Bottom Left */}
+        <video
+          ref={el => videoRefs.current[2] = el}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute object-cover opacity-38"
+          style={{
+            width: '300px',
+            height: '210px',
+            bottom: '6%',
+            left: '5%',
+            filter: 'blur(4px)',
+          }}
+          onError={(e) => console.error('Video 3 error:', e)}
+          onLoadedData={() => console.log('Video 3 loaded')}
+        >
+          <source src="/videos/bg3.mp4" type="video/mp4"/>
+        </video>
 
+        {/* Bottom Right */}
+        <video
+          ref={el => videoRefs.current[3] = el}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute object-cover opacity-40"
+          style={{
+            width: '290px',
+            height: '200px',
+            bottom: '8%',
+            right: '6%',
+            filter: 'blur(4px)',
+          }}
+          onError={(e) => console.error('Video 4 error:', e)}
+          onLoadedData={() => console.log('Video 4 loaded')}
+        >
+          <source src="/videos/bg1.mp4" type="video/mp4"/>
+        </video>
+
+        {/* Middle Left (behind left frame) */}
+        <video
+          ref={el => videoRefs.current[4] = el}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute object-cover opacity-25"
+          style={{
+            width: '250px',
+            height: '180px',
+            top: '35%',
+            left: '2%',
+            filter: 'blur(8px)',
+          }}
+          onError={(e) => console.error('Video 5 error:', e)}
+          onLoadedData={() => console.log('Video 5 loaded')}
+        >
+          <source src="/videos/bg2.mp4" type="video/mp4"/>
+        </video>
+
+        {/* Middle Right (behind right frame) */}
+        <video
+          ref={el => videoRefs.current[5] = el}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute object-cover opacity-25"
+          style={{
+            width: '260px',
+            height: '190px',
+            top: '40%',
+            right: '3%',
+            filter: 'blur(8px)',
+          }}
+          onError={(e) => console.error('Video 6 error:', e)}
+          onLoadedData={() => console.log('Video 6 loaded')}
+        >
+          <source src="/videos/bg3.mp4" type="video/mp4"/>
+        </video>
       </div>
 
 
@@ -142,6 +257,7 @@ export default function HeroModal({ hero, onClose }) {
 
       <div
         className="absolute left-1/2 top-1/2 flex items-center justify-center gap-1 -translate-x-1/2 -translate-y-1/2"
+        style={{ zIndex: 10 }}
         onClick={(e)=>e.stopPropagation()}
       >
 
