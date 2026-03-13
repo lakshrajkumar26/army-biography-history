@@ -1,337 +1,311 @@
-import { useEffect, useRef } from 'react'
-import gsap from 'gsap'
+import { useEffect, useRef } from "react"
+import gsap from "gsap"
 
 export default function HeroModal({ hero, onClose }) {
+
   const modalRef = useRef(null)
-  const backgroundRef = useRef(null)
   const centerFrameRef = useRef(null)
   const leftFrameRef = useRef(null)
   const rightFrameRef = useRef(null)
-  const matrixLinesRef = useRef([])
 
   useEffect(() => {
+
     const ctx = gsap.context(() => {
-      // Background matrix animation
-      gsap.to(matrixLinesRef.current, {
-        y: '100%',
-        duration: 2,
-        stagger: 0.05,
-        repeat: -1,
-        ease: 'none'
-      })
 
-      // Modal entrance animation
       const tl = gsap.timeline()
-      
-      // Fade in background
-      tl.from(modalRef.current, {
-        opacity: 0,
-        duration: 0.3
+
+      // fade modal
+      tl.from(modalRef.current,{
+        opacity:0,
+        duration:0.3
       })
 
-      // Center frame appears first
-      tl.from(centerFrameRef.current, {
-        scale: 0.5,
-        opacity: 0,
-        duration: 0.6,
-        ease: 'back.out(1.7)'
+      // center card appears
+      tl.from(centerFrameRef.current,{
+        scale:0.85,
+        opacity:0,
+        duration:0.45,
+        ease:"power3.out"
       })
 
-      // Left and right frames slide in
-      tl.from(leftFrameRef.current, {
-        x: 200,
-        opacity: 0,
-        duration: 0.5,
-        ease: 'power3.out'
-      }, '-=0.3')
+      // frames slide outward
+      tl.to(leftFrameRef.current,{
+        x:-360,
+        duration:0.7,
+        ease:"power4.out"
+      },"-=0.2")
 
-      tl.from(rightFrameRef.current, {
-        x: -200,
-        opacity: 0,
-        duration: 0.5,
-        ease: 'power3.out'
-      }, '-=0.5')
+      tl.to(rightFrameRef.current,{
+        x:360,
+        duration:0.7,
+        ease:"power4.out"
+      },"-=0.7")
 
-      // Floating animation for frames
-      gsap.to(centerFrameRef.current, {
-        y: -10,
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut'
+      // floating motion
+      gsap.to(centerFrameRef.current,{
+        y:-10,
+        duration:2,
+        repeat:-1,
+        yoyo:true,
+        ease:"sine.inOut"
       })
 
-      gsap.to(leftFrameRef.current, {
-        y: -8,
-        duration: 2.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut'
+      gsap.to(leftFrameRef.current,{
+        y:-8,
+        duration:2.3,
+        repeat:-1,
+        yoyo:true,
+        ease:"sine.inOut"
       })
 
-      gsap.to(rightFrameRef.current, {
-        y: -8,
-        duration: 2.3,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut'
+      gsap.to(rightFrameRef.current,{
+        y:-8,
+        duration:2.5,
+        repeat:-1,
+        yoyo:true,
+        ease:"sine.inOut"
       })
+
     })
 
-    return () => ctx.revert()
-  }, [])
+    return ()=>ctx.revert()
+
+  },[])
 
   const handleClose = () => {
-    const tl = gsap.timeline({
-      onComplete: onClose
+
+    const tl = gsap.timeline({onComplete:onClose})
+
+    tl.to([leftFrameRef.current,rightFrameRef.current],{
+      x:0,
+      opacity:0,
+      duration:0.35
     })
 
-    tl.to([leftFrameRef.current, rightFrameRef.current], {
-      x: 0,
-      opacity: 0,
-      duration: 0.3,
-      ease: 'power2.in'
-    })
+    tl.to(centerFrameRef.current,{
+      scale:0.8,
+      opacity:0,
+      duration:0.35
+    },"-=0.2")
 
-    tl.to(centerFrameRef.current, {
-      scale: 0.5,
-      opacity: 0,
-      duration: 0.4,
-      ease: 'back.in(1.7)'
-    }, '-=0.2')
+    tl.to(modalRef.current,{
+      opacity:0,
+      duration:0.2
+    },"-=0.2")
 
-    tl.to(modalRef.current, {
-      opacity: 0,
-      duration: 0.2
-    }, '-=0.2')
   }
 
   return (
+
     <div
       ref={modalRef}
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black"
       onClick={handleClose}
     >
-      {/* Animated Background */}
-      <div ref={backgroundRef} className="absolute inset-0 bg-black overflow-hidden">
-        {/* Matrix-style encoding/decoding animation */}
-        <div className="absolute inset-0 opacity-20">
-          {[...Array(30)].map((_, i) => (
-            <div
-              key={i}
-              ref={el => matrixLinesRef.current[i] = el}
-              className="absolute text-green-500 font-mono text-xs whitespace-nowrap"
-              style={{
-                left: `${(i * 3.33)}%`,
-                top: '-100%',
-                transform: `translateY(-100%)`,
-              }}
-            >
-              {Array.from({ length: 50 }, () => 
-                Math.random() > 0.5 ? '1' : '0'
-              ).join('')}
-            </div>
-          ))}
-        </div>
 
-        {/* Abstract geometric patterns */}
-        <div className="absolute inset-0 opacity-10">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute border border-cyan-500"
-              style={{
-                width: `${Math.random() * 200 + 50}px`,
-                height: `${Math.random() * 200 + 50}px`,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                transform: `rotate(${Math.random() * 360}deg)`,
-                animation: `pulse ${Math.random() * 3 + 2}s infinite alternate`
-              }}
-            />
-          ))}
-        </div>
+      {/* VIDEO BACKGROUND */}
+
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+
+        {[1,2,3,4,5].map((v,i)=>(
+          <video
+            key={i}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute object-cover opacity-25 blur-sm"
+            style={{
+              width:`${320 + i*40}px`,
+              left:`${10 + i*15}%`,
+              top:`${10 + (i*12)%80}%`
+            }}
+          >
+            <source src={`/videos/bg${(i%3)+1}.mp4`} type="video/mp4"/>
+          </video>
+        ))}
+
       </div>
 
-      {/* Close button */}
+
+      {/* CLOSE BUTTON */}
+
       <button
         onClick={handleClose}
-        className="absolute top-8 right-8 z-50 w-12 h-12 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center text-white text-3xl font-bold transition-all duration-300 shadow-2xl"
+        className="absolute top-8 right-8 z-50 w-12 h-12 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center text-white text-3xl font-bold"
       >
         ×
       </button>
 
-      {/* Three Frame Layout */}
-      <div className="relative w-full h-full flex items-center justify-center px-8" onClick={(e) => e.stopPropagation()}>
-        
-        {/* LEFT FRAME - Biography */}
+
+      {/* MODAL LAYOUT */}
+
+      <div
+        className="absolute left-1/2 top-1/2 flex items-center justify-center gap-4 -translate-x-1/2 -translate-y-1/2"
+        onClick={(e)=>e.stopPropagation()}
+      >
+
+        {/* LEFT FRAME */}
+
         <div
           ref={leftFrameRef}
-          className="absolute left-[5%] w-[320px] h-[480px] z-10"
+          className="relative w-[320px] sm:w-[380px] lg:w-[440px] h-[520px] sm:h-[580px] lg:h-[640px] z-20"
           style={{
-            filter: 'drop-shadow(0 20px 40px rgba(139,0,0,0.8))',
+            filter:"drop-shadow(0 30px 60px rgba(139,0,0,0.9))"
           }}
         >
-          <div className="relative w-full h-full">
-            <img
-              src="/frame/frame 1 red.png"
-              alt="frame"
-              className="absolute inset-0 w-full h-full object-contain"
-            />
-            <div className="absolute inset-0 flex flex-col items-center justify-start py-20 px-10 overflow-y-auto">
-              <h2 className="text-2xl font-bold mb-6 font-serif text-center"
-                style={{
-                  color: '#ffffff',
-                  textShadow: '3px 3px 8px rgba(0,0,0,1), 0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,255,255,0.6)',
-                }}
-              >
-                Biography
-              </h2>
-              <div className="text-white text-sm leading-relaxed font-serif text-center px-2"
-                style={{
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.8)',
-                }}
-              >
-                {hero.bio}
-              </div>
-            </div>
+
+          <div
+            className="absolute inset-[40px] rounded-md"
+            style={{
+              background:"#0f0f0f",
+              backgroundImage:`
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06), transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 40%)
+              `
+            }}
+          />
+
+          <img
+            src="/frame/frame 1 red.png"
+            className="absolute inset-0 w-full h-full object-contain"
+          />
+
+          <div className="absolute inset-0 flex flex-col items-center py-24 px-10 overflow-y-auto">
+
+            <h2 className="text-xl font-bold text-white mb-6">
+              Biography
+            </h2>
+
+            <p className="text-white text-sm text-center leading-relaxed">
+              {hero.bio}
+            </p>
+
           </div>
+
         </div>
 
-        {/* CENTER FRAME - Main Image */}
+
+        {/* CENTER FRAME */}
+
         <div
           ref={centerFrameRef}
-          className="relative w-[380px] h-[550px] z-30"
+          className="relative w-[320px] sm:w-[380px] lg:w-[420px] h-[480px] sm:h-[540px] lg:h-[600px] z-30"
           style={{
-            filter: 'drop-shadow(0 30px 60px rgba(139,0,0,1))',
+            filter:"drop-shadow(0 40px 80px rgba(139,0,0,1))"
           }}
         >
-          <div className="relative w-full h-full">
-            <img
-              src="/frame/frame 1 red.png"
-              alt="frame"
-              className="absolute inset-0 w-full h-full object-contain"
-            />
-            <div className="absolute inset-0 flex flex-col items-center justify-between py-24 px-12">
-              {/* Hero Name */}
-              <h3 
-                className="font-serif text-center leading-tight"
+
+          <div
+            className="absolute inset-[50px] rounded-md"
+            style={{
+              background:"#0f0f0f",
+              backgroundImage:`
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06), transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 40%)
+              `
+            }}
+          />
+
+          <img
+            src="/frame/frame 1 red.png"
+            className="absolute inset-0 w-full h-full object-contain"
+          />
+
+          <div className="absolute inset-0 flex flex-col items-center justify-between py-24 px-12">
+
+            <h3 className="text-white text-3xl font-bold tracking-widest text-center">
+              {hero.name}
+            </h3>
+
+            <div className="relative">
+
+              <div
+                className="absolute inset-0 blur-3xl opacity-70"
                 style={{
-                  fontSize: '28px',
-                  fontWeight: 700,
-                  letterSpacing: '3px',
-                  color: '#ffffff',
-                  textTransform: 'uppercase',
-                  textShadow: '3px 3px 8px rgba(0,0,0,1), 0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,255,255,0.6)',
+                  background:"radial-gradient(circle,#dc2626,#8b0000)"
+                }}
+              />
+
+              <div
+                className="relative rounded-lg p-1"
+                style={{
+                  background:"#805B60",
+                  boxShadow:"0 0 50px #805B60"
                 }}
               >
-                {hero.name}
-              </h3>
 
-              {/* Portrait */}
-              <div className="relative">
-                <div 
-                  className="absolute inset-0 rounded-lg blur-3xl opacity-70"
-                  style={{
-                    background: 'radial-gradient(circle, #dc2626, #8b0000)',
-                  }}
+                <img
+                  src={hero.image}
+                  className="w-52 h-52 object-cover rounded-lg"
                 />
-                
-                {/* Border wrapper */}
-                <div 
-                  className="relative rounded-lg p-1"
-                  style={{
-                    background: '#805B60',
-                    boxShadow: '0 0 40px #805B60, 0 0 60px #805B60',
-                  }}
-                >
-                  <img
-                    src={hero.image}
-                    alt={hero.name}
-                    className="relative w-48 h-48 object-cover rounded-lg shadow-2xl"
-                    style={{
-                      filter: 'grayscale(100%) contrast(1.3) brightness(1.15)',
-                      boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)',
-                    }}
-                  />
-                </div>
+
               </div>
 
-              {/* Years */}
-              {hero.years && (
-                <p 
-                  className="font-serif text-center"
-                  style={{
-                    fontSize: '22px',
-                    fontWeight: 600,
-                    letterSpacing: '4px',
-                    color: '#ffffff',
-                    textShadow: '3px 3px 8px rgba(0,0,0,1), 0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,255,255,0.6)',
-                  }}
-                >
-                  {hero.years}
-                </p>
-              )}
             </div>
+
+            {hero.years && (
+
+              <p className="text-white text-xl tracking-widest">
+                {hero.years}
+              </p>
+
+            )}
+
           </div>
+
         </div>
 
-        {/* RIGHT FRAME - Timeline */}
+
+        {/* RIGHT FRAME */}
+
         <div
           ref={rightFrameRef}
-          className="absolute right-[5%] w-[320px] h-[480px] z-10"
+          className="relative  w-[320px] sm:w-[380px] lg:w-[420px] h-[480px] sm:h-[540px] lg:h-[600px] z-20"
           style={{
-            filter: 'drop-shadow(0 20px 40px rgba(139,0,0,0.8))',
+            filter:"drop-shadow(0 30px 60px rgba(139,0,0,0.9))"
           }}
         >
-          <div className="relative w-full h-full">
-            <img
-              src="/frame/frame 1 red.png"
-              alt="frame"
-              className="absolute inset-0 w-full h-full object-contain"
-            />
-            <div className="absolute inset-0 flex flex-col items-center justify-start py-20 px-10 overflow-y-auto">
-              <h2 className="text-2xl font-bold mb-6 font-serif text-center"
-                style={{
-                  color: '#ffffff',
-                  textShadow: '3px 3px 8px rgba(0,0,0,1), 0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,255,255,0.6)',
-                }}
-              >
-                Timeline
-              </h2>
-              {hero.timeline && hero.timeline.length > 0 ? (
-                <div className="space-y-4 w-full">
-                  {hero.timeline.map((t, i) => (
-                    <div key={i} className="relative pl-6 pb-4 border-l-2 border-white last:border-l-0">
-                      <div className="absolute left-0 top-0 w-3 h-3 bg-white rounded-full -translate-x-[7px] shadow-lg"
-                        style={{
-                          boxShadow: '0 0 10px rgba(255,255,255,0.8)',
-                        }}
-                      ></div>
-                      <p className="text-white font-bold text-sm mb-1 font-serif"
-                        style={{
-                          textShadow: '2px 2px 4px rgba(0,0,0,0.9), 0 0 8px rgba(255,255,255,0.5)',
-                        }}
-                      >{t.year}</p>
-                      <p className="text-white text-xs leading-relaxed font-serif"
-                        style={{
-                          textShadow: '2px 2px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.8)',
-                        }}
-                      >{t.event}</p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-400 italic font-serif text-sm"
-                  style={{
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.9)',
-                  }}
-                >No timeline available</p>
-              )}
-            </div>
+
+          <div
+            className="absolute inset-[40px] rounded-md"
+            style={{
+              background:"#0f0f0f",
+              backgroundImage:`
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06), transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 40%)
+              `
+            }}
+          />
+
+          <img
+            src="/frame/frame 1 red.png"
+            className="absolute inset-0 w-full h-full object-contain"
+          />
+
+          <div className="absolute inset-0 flex flex-col items-center py-24 px-10 overflow-y-auto">
+
+            <h2 className="text-xl font-bold text-white mb-6">
+              Timeline
+            </h2>
+
+            {hero.timeline?.map((t,i)=>(
+              <div key={i} className="text-center text-white mb-4">
+
+                <p className="font-bold">{t.year}</p>
+                <p className="text-sm">{t.event}</p>
+
+              </div>
+            ))}
+
           </div>
+
         </div>
+
       </div>
+
     </div>
+
   )
+
 }
