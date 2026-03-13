@@ -7,33 +7,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        'hero-dark': '#0a0f14',
-        'hero-red': '#dc2626',
-        'hero-gold': '#fbbf24',
+        'museum-bg': '#f5f3ef',
+        'museum-sidebar': '#eceae6',
+        'museum-hover': '#e2dfdb',
+        'museum-dark': '#2f3135',
+        'museum-burgundy': '#4b1f22',
+        'museum-border': '#7b3a3f',
+        'museum-text': '#555',
+        'museum-light-text': '#c9b6b6',
       },
-      animation: {
-        'float': 'float 6s ease-in-out infinite',
-        'glow': 'glow 2s ease-in-out infinite alternate',
-        'slide-up': 'slideUp 0.8s ease-out',
-        'fade-in': 'fadeIn 1s ease-out',
-      },
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-20px)' },
-        },
-        glow: {
-          '0%': { boxShadow: '0 0 5px #dc2626, 0 0 10px #dc2626, 0 0 15px #dc2626' },
-          '100%': { boxShadow: '0 0 10px #dc2626, 0 0 20px #dc2626, 0 0 30px #dc2626' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(100px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
+      fontFamily: {
+        'serif': ['Playfair Display', 'serif'],
+        'baskerville': ['Libre Baskerville', 'serif'],
       },
     },
   },
