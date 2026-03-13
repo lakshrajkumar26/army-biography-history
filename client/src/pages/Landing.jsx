@@ -3,109 +3,141 @@ import axios from "axios"
 import HeroCard from "../components/HeroCard"
 import HeroModal from "../components/HeroModal"
 
+import gsap from "gsap"
+import { Flip } from "gsap/flip"
+
+gsap.registerPlugin(Flip)
+
 export default function Landing() {
+
   const [heroes, setHeroes] = useState([])
   const [selected, setSelected] = useState(null)
+  const [showModal, setShowModal] = useState(false)
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState("all")
 
   useEffect(() => {
     const fetchHeroes = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/heroes")
-        setHeroes(res.data)
-      } catch (err) {
-        console.error("Error fetching heroes:", err)
-        setHeroes([])
-      } finally {
-        setTimeout(() => {
-          setLoading(false)
-        }, 500)
-      }
+      const res = await axios.get("http://localhost:5000/api/heroes")
+      setHeroes(res.data)
+      setLoading(false)
     }
-
     fetchHeroes()
   }, [])
 
-  const filteredHeroes = heroes.filter(hero => 
-    filter === "all" || hero.category?.toLowerCase() === filter.toLowerCase()
+
+
+
+  // Animation when selecting hero
+ const handleSelectHero = (hero, element) => {
+
+  const rect = element.getBoundingClientRect()
+
+  console.log("Card rect:", rect)
+
+  const clone = element.cloneNode(true)
+
+  clone.style.position = "fixed"
+  clone.style.left = rect.left + "px"
+  clone.style.top = rect.top + "px"
+  clone.style.width = rect.width + "px"
+  clone.style.height = rect.height + "px"
+  clone.style.margin = 0
+  clone.style.zIndex = 9999
+  clone.style.pointerEvents = "none"
+  clone.style.transform = "none"
+  clone.style.transition = "none"
+
+  document.body.appendChild(clone)
+
+  // target center position
+const targetX = window.innerWidth / 2 - rect.width / 2
+const targetY = window.innerHeight / 2 - rect.height / 2
+
+const dx = targetX - rect.left
+const dy = targetY - rect.top
+
+gsap.to(clone, {
+  duration: 0.6,
+  x: dx,
+  y: dy,
+  scale: 1.15,
+  ease: "power3.out",
+  onComplete: () => {
+    clone.remove()
+
+    requestAnimationFrame(() => {
+      setSelected(hero)
+      setShowModal(true)
+    })
+  }
+})
+}
+
+  // useEffect(() => {
+  //   if (selected) {
+  //     const timer = setTimeout(() => {
+  //       setShowModal(true)
+  //     }, 2200)
+
+  //     return () => clearTimeout(timer)
+  //   } else {
+  //     setShowModal(false)
+  //   }
+  // }, [selected])
+
+  const filteredHeroes = heroes.filter(
+    hero => filter === "all" || hero.category?.toLowerCase() === filter
   )
 
-  const categories = [
-    { id: "all", label: "ALL" },
-    { id: "army", label: "Army" },
-    { id: "air force", label: "Air Force" },
-    { id: "navy", label: "Navy" }
-  ]
-
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#f5f3ef] flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#4b1f22] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-[#555] font-serif text-lg">Loading Gallery...</p>
-        </div>
-      </div>
-    )
+    return <div className="flex justify-center items-center h-screen">Loading...</div>
   }
 
   return (
     <div className="min-h-screen bg-[#f5f3ef]">
-      <div className="flex">
-        {/* LEFT SIDEBAR - Category Filter */}
-        <aside className="w-[260px] min-h-screen bg-[#f5f3ef] p-6 shadow-[4px_0_12px_rgba(0,0,0,0.08)] sticky top-0">
-          <div className="space-y-3">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setFilter(category.id)}
-                className={`w-full text-left px-[18px] py-[14px] rounded-md transition-all duration-200 font-serif ${
-                  filter === category.id
-                    ? 'bg-[#2f3135] text-white font-semibold'
-                    : 'bg-[#eceae6] text-[#555] font-medium hover:bg-[#e2dfdb]'
-                }`}
-              >
-                {category.label}
-              </button>
-            ))}
-          </div>
+
+      <div className="flex flex-col md:flex-row">
+
+        <aside className="w-[260px] p-6">
+          <button onClick={() => setFilter("all")}>ALL</button>
+          <button onClick={() => setFilter("army")}>Army</button>
+          <button onClick={() => setFilter("air force")}>Air Force</button>
+          <button onClick={() => setFilter("navy")}>Navy</button>
         </aside>
 
-        {/* RIGHT CONTENT - Hero Cards Grid */}
         <main className="flex-1 p-12">
-          {filteredHeroes.length > 0 ? (
-            <div className="flex flex-wrap gap-[35px] justify-start items-start">
-              {filteredHeroes.map((hero) => (
-                <HeroCard
-                  key={hero._id}
-                  hero={hero}
-                  setSelected={setSelected}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20">
-              <h3 className="text-2xl text-[#555] font-serif mb-4">
-                {heroes.length === 0 
-                  ? "No heroes data available. Please start the backend server and seed the database." 
-                  : "No heroes found in this category."}
-              </h3>
-              {heroes.length === 0 && (
-                <p className="text-[#888] text-sm font-serif">
-                  Run: <code className="bg-[#eceae6] px-2 py-1 rounded">cd server && npm run seed</code>
-                </p>
-              )}
-            </div>
-          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
+
+            {filteredHeroes.map(hero => (
+
+              <HeroCard
+                key={hero._id}
+                hero={hero}
+                onSelect={handleSelectHero}
+              />
+
+            ))}
+
+          </div>
+
         </main>
+
       </div>
 
-      {selected && (
-        <HeroModal
-          hero={selected}
-          onClose={() => setSelected(null)}
-        />
+      {showModal && selected && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <HeroModal
+            hero={selected}
+            onClose={() => {
+              setShowModal(false)
+              setSelected(null)
+            }}
+          />
+        </div>
       )}
+
     </div>
   )
 }
