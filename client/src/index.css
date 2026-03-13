@@ -36,3 +36,15 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #7b3a3f;
 }
+
+/* Pulse animation for background geometric patterns */
+@keyframes pulse {
+  0% {
+    opacity: 0.05;
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0.15;
+    transform: scale(1.1) rotate(5deg);
+  }
+}
