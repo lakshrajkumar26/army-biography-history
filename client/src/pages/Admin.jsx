@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 
-export default function Admin() {
+export default function Admin({ currentUser, onLogout }) {
   const [heroes, setHeroes] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingHero, setEditingHero] = useState(null)
+  const [showAdminPanel, setShowAdminPanel] = useState(false)
+  const [admins, setAdmins] = useState([])
+  const [adminForm, setAdminForm] = useState({ username: "", password: "", role: "admin" })
   const [formData, setFormData] = useState({
     name: "",
     title: "",

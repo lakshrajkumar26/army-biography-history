@@ -22,7 +22,8 @@ app.use(express.json());
 // allowed frontend origins
 const allowedOrigins = [
   "http://localhost:5173",   // Vite React
-  "http://localhost:3000"
+  "http://localhost:3000",
+  "http://localhost:5174"
 ];
 
 app.use(
